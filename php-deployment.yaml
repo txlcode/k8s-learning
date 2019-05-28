@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+    name: php-deployment
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: php
+    template:
+        metadata:
+            labels:
+                app: php
+        spec:
+            containers:
+                - name: php
+                  image: php:7.2-fpm
+                  volumeMounts:
+                      - name: php-data
+                        mountPath: /usr/share/nginx/html
+            volumes:
+                - name: php-data
+                  persistentVolumeClaim:
+                    claimName: nginx-php

@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+    name: nginx-deployment
+spec:
+    selector:
+        matchLabels:
+            app: nginx
+    template:
+        metadata:
+            labels:
+                app: nginx
+        spec:
+            containers:
+                - name: nginx
+                  image: nginx:alpine
+                  volumeMounts:
+                      - name: nginx-config
+                        mountPath: /etc/nginx/conf.d
+                      - name: nginx-data
+                        mountPath: /usr/share/nginx/html
+            volumes:
+                - name: nginx-config
+                  configMap:
+                      name: nginx-config
+                - name: nginx-data
+                  persistentVolumeClaim:
+                    claimName: nginx-php
